@@ -6,7 +6,3 @@ data/
 __pycache__/
 *.pyc
 .venv/
-
-# 用户自己的知识库内容（随使用者不同）
-knowledge/*
-!knowledge/README.md

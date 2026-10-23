@@ -56,6 +56,27 @@ async def generate_image(prompt: str, size: str = "1024x1024",
 
 
 @function_tool
+async def generate_image_set(shots_json: str, default_reference: str = "") -> str:
+    """整套图顺序生成（Listing 7 图 / A+）。传入分镜 JSON 数组，逐张生成、单张失败不中断。
+
+    Args:
+        shots_json: 分镜数组 JSON，每项 {"name":"卖点图","prompt":"英文画面描述",
+                    "size":"1600x1600","presence":"supporting","reference_image":"可选，默认用 default_reference"}
+        default_reference: 全套共用的产品白底参考图路径（保证产品一致），可选
+    """
+    try:
+        shots = json.loads(shots_json)
+    except json.JSONDecodeError as e:
+        return f"shots_json 不是合法 JSON: {e}"
+    if not isinstance(shots, list) or not shots:
+        return "shots_json 必须是非空数组"
+    results = await image_gen.generate_image_set(shots[:9], default_reference)
+    ok = sum(1 for r in results if r["ok"])
+    return json.dumps({"summary": f"{ok}/{len(results)} 张成功", "images": results},
+                      ensure_ascii=False, indent=2)
+
+
+@function_tool
 async def translate_image(image_path: str, target_language: str) -> str:
     """图片翻译：把图上文字译成目标语言，版式/产品/配色完全不变。
     用于一套图铺多站点。image_path 支持本地路径或 scrape_product 返回的图片路径。

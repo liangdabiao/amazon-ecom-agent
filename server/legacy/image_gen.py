@@ -255,6 +255,27 @@ async def generate_image(prompt: str, size: str = "1024x1024",
     return {"file": str(p), "url": f"/images/{p.name}", "size": size}
 
 
+async def generate_image_set(shots: list[dict], default_reference: str = "") -> list[dict]:
+    """整套图顺序生成（Listing 7 图叙事 / A+）。单张失败不中断，最后统一汇报。
+
+    shots 每项：{name, prompt, size?, presence?, reference_image?}。"""
+    results: list[dict] = []
+    for i, shot in enumerate(shots):
+        name = str(shot.get("name") or f"图{i + 1}")
+        try:
+            ref = str(shot.get("reference_image") or default_reference or "")
+            r = await generate_image(
+                str(shot.get("prompt") or ""),
+                str(shot.get("size") or "1600x1600"),
+                ref,
+                str(shot.get("presence") or "supporting"))
+            results.append({"name": name, "ok": True, **r})
+        except Exception as exc:  # noqa: BLE001 — 一张失败不拖垮整套
+            logger.warning("整套图 %s 失败: %s", name, exc)
+            results.append({"name": name, "ok": False, "error": str(exc)[:300]})
+    return results
+
+
 async def translate_image(image_path: str, target_language: str) -> dict:
     """图片翻译：逐像素复现原图，唯一改动是图上文字换成目标语言。
 

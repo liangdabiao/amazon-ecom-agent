@@ -11,5 +11,18 @@
 
 助手回答政策、费用、FBA、规则类事实问题前会先检索这里，并在回答中注明来源文件。
 
+## 内置技能方法论（knowledge/skills/）
+
+从 IvyeaOps（AGPL）与 ivyea-agent（MIT）平移的 11 套实战技能 + 2 份报告模板：
+
+| 目录 | 内容 |
+|---|---|
+| `zach-search-term-report-analyzer/` | 广告搜索词诊断完整方法论（词分类/决策规则/可落地提案，5 篇 references） |
+| `amazon-asin-cosmo-rufus-audit/` | ASIN 深度审计（COSMO/Rufus 11 板块 + 报告/改写模板） |
+| `amazon-listing-creative/` | Listing 视觉创意（主图合规、7 位策略、卖点位置） |
+| `amazon-ad-campaign-optimization/` | 广告活动优化决策规则 |
+| `market-report-templates/` | 市调报告模板（关键词 9 章 / ASIN 8 章完整版，含数据真实性军规） |
+| `budget-pacing/` `launch-playbook/` `listing-conversion-audit/` `negative-keyword-guard/` `search-term-optimizer/` `weekly-account-review/` | 六套轻量工作流（预算/新品/转化/否词/搜索词/周报） |
+
 **想补充自己的知识**：往对应子目录（或新建子目录）放 markdown 即可，无需重启——
 每次检索实时扫描。
